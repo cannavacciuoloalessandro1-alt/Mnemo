@@ -1,237 +1,85 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Memory Game</title>
-  <style>
-    body {
-      font-family: 'Comic Sans MS', sans-serif; /* Carattere simpatico */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #f0f0f0;
-      flex-direction: column;
-      padding: 20px; /* Aggiunta di padding per evitare che gli elementi siano troppo vicini ai bordi */
-    }
-    #gameTitle{
-      font-size: 48px;
-      font-weight: bold;
-      background: linear-gradient(90deg,#3498db,#f39c12);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    #message {
-      font-size: 36px;
-      font-weight: bold;
-      color: #e74c3c;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .scoreboard {
-      font-size: 24px;
-      color: #3498db;
-      margin-bottom: 20px;
-    }
-    .game-board {
-      display: grid;
-      grid-template-columns: repeat(4, 100px); /* 4 colonne */
-      grid-template-rows: repeat(4, 100px); /* 4 righe */
-      gap: 10px;
-      justify-items: center;
-      align-items: center;
-      margin-bottom: 40px; /* Distanza tra la griglia e il bottone */
-    }
-    .card {
-      width: 90px;
-      height: 90px;
-      background-color: #3498db;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 24px;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-      transform: scale(1);
-      transition: all 0.3s ease;
-    }
-    .card.flipped {
-      background-color: #f39c12;
-    }
-    .card.matched {
-      background-color: #2ecc71;
-      pointer-events: none;
-    }
-    .card:active {
-      transform: scale(0.95);
-    }
-    /* Stile per il bottone di restart */
-    #restartBtn {
-      font-size: 24px;
-      padding: 10px 20px;
-      background-color: #3498db;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      display: none; /* Il bottone è inizialmente nascosto */
-      transition: all 0.3s ease;
-    }
-    #restartBtn:hover {
-      background-color: #2980b9;
-    }
-    /* Cuori per le vite */
-    .lives {
-      font-size: 32px;
-      color: red;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-    .heart {
-      font-size: 36px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mnemo - Memory Evolution</title>
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+<header id="header">
+<h1 id="gameTitle">Mnemo</h1>
+<div id="controls">
+<label for="difficulty">Difficoltà</label>
+<select id="difficulty">
+<option value="easy">Facile (4x4)</option>
+<option value="medium" selected>Normale (4x5)</option>
+<option value="hard">Difficile (6x6)</option>
+</select>
 
-  <div id="gameTitle">Mnemo</div>
-  <div id="message"></div>
-  <div class="lives" id="lives"></div>  <!-- Area delle vite -->
-  <div class="scoreboard" id="scoreboard">Punteggio: 0</div>
-  <div class="game-board" id="gameBoard"></div>
-  <button id="restartBtn" onclick="setupGame()">Ricomincia</button>
-  <script>
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';  // Tutte le lettere dell'alfabeto
-    let symbols = [];
-    let flippedCards = [];
-    let matchedCards = 0;
-    let score = 0;
-    let lives = 3; // Numero di vite iniziali
 
-    // Funzione per miscelare l'array
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
+<button id="startBtn" class="primary">Start</button>
+<button id="restartBtn">Ricomincia</button>
+<button id="hintBtn">Hint (x2)</button>
 
-    // Funzione per creare le carte (8 lettere casuali)
-    function createCards() {
-      symbols = [];
-      // Selezioniamo 8 lettere casuali dall'alfabeto per un totale di 16 carte
-      const randomSymbols = [];
-      while (randomSymbols.length < 8) {
-        const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
-        if (!randomSymbols.includes(randomLetter)) {
-          randomSymbols.push(randomLetter);
-        }
-      }
-      symbols = [...randomSymbols, ...randomSymbols]; // Duplichiamo per creare le coppie
-      shuffle(symbols);
-    }
 
-    // Funzione per aggiornare il display delle vite
-    function updateLives() {
-      const livesContainer = document.getElementById('lives');
-      livesContainer.innerHTML = '';  // Pulisce l'area delle vite
-      // Mostra i cuori
-      for (let i = 0; i < 5; i++) {
-        const heart = document.createElement('span');
-        heart.classList.add('heart');
-        heart.innerText = i < lives ? '❤️' : '💔';  // Se la vita è ancora disponibile, mostriamo un cuore pieno, altrimenti vuoto
-        livesContainer.appendChild(heart);
-      }
-    }
+<label class="switch">
+<input id="soundToggle" type="checkbox" checked />
+<span class="slider"></span>
+</label>
+<span class="small">Suoni</span>
+</div>
+</header>
 
-    // Funzione per creare il gioco
-    function setupGame() {
-      createCards();
-      const gameBoard = document.getElementById('gameBoard');
-      gameBoard.innerHTML = '';  // Pulisce la board esistente
 
-      matchedCards = 0;
-      score = 0;
-      lives = 5;  // Reset delle vite
-      scoreboard.innerText = `Punteggio: ${score}`;
-      message.innerText = '';  // Resetta il messaggio
-      document.getElementById('restartBtn').style.display = 'none';  // Nasconde il bottone di restart
-      updateLives();  // Aggiorna la visualizzazione delle vite
+<main>
+<section id="hud">
+<div id="message"></div>
+<div id="scoreboard">Punteggio: 0</div>
+<div id="stats">
+<div>Tempo: <span id="timer">00:00</span></div>
+<div>Move: <span id="moves">0</span></div>
+<div id="lives" class="lives"></div>
+</div>
+</section>
 
-      // Creiamo le carte nel DOM
-      symbols.forEach((symbol, index) => {
-        const card = document.createElement('div');
-        card.classList.add('card');
-        card.dataset.symbol = symbol;
-        card.dataset.index = index;
-        card.innerText = '';  // La carta è inizialmente vuota
-        card.addEventListener('click', handleCardClick);
-        gameBoard.appendChild(card);
-      });
-    }
 
-    // Funzione per gestire il click sulla carta
-    function handleCardClick(event) {
-      const clickedCard = event.target;
+<section id="gameArea">
+<div class="game-board" id="gameBoard" aria-live="polite"></div>
+</section>
 
-      // Evita che l'utente clicchi più di due carte alla volta
-      if (flippedCards.length === 2 || clickedCard.classList.contains('flipped') || clickedCard.classList.contains('matched')) {
-        return;
-      }
 
-      clickedCard.classList.add('flipped');
-      clickedCard.innerText = clickedCard.dataset.symbol;
-      flippedCards.push(clickedCard);
+<section id="sidebar">
+<h3>Power-ups</h3>
+<ul id="powerups">
+<li><button id="revealBtn">Reveal (cost 15)</button></li>
+<li><button id="freezeBtn">Freeze (cost 20)</button></li>
+</ul>
 
-      // Se sono due carte girate, controlla se sono uguali
-      if (flippedCards.length === 2) {
-        const [card1, card2] = flippedCards;
-        if (card1.dataset.symbol === card2.dataset.symbol) {
-          card1.classList.add('matched');
-          card2.classList.add('matched');
-          matchedCards++;
-          score += 10;  // Aggiungi 10 punti per ogni coppia trovata
-          scoreboard.innerText = `Punteggio: ${score}`;
-          if (matchedCards === symbols.length / 2) {
-            setTimeout(() => {
-              message.innerText = 'Hai vinto!'; // Mostra il messaggio di vittoria
-              document.getElementById('restartBtn').style.display = 'inline-block'; // Mostra il bottone di restart
-            }, 500);
-          }
-        } else {
-          // Se le carte non corrispondono, perdi una vita (mezzo cuore)
-          lives -= 0.5;
-          updateLives(); // Aggiorna la visualizzazione delle vite
-          if (lives <= 0) {
-            setTimeout(() => {
-              message.innerText = 'Game Over!'; // Mostra il messaggio di game over
-              document.getElementById('restartBtn').style.display = 'inline-block'; // Mostra il bottone di restart
-            }, 500);
-          }
-          setTimeout(() => {
-            card1.classList.remove('flipped');
-            card2.classList.remove('flipped');
-            card1.innerText = '';
-            card2.innerText = '';
-          }, 1000);
-        }
-        flippedCards = [];
-      }
-    }
 
-    // Inizializza il gioco al caricamento
-    setupGame();
+<h3>Classifica locale</h3>
+<ol id="leaderboard"></ol>
+</section>
+</main>
 
-  </script>
 
+<!-- Modal risultato -->
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+<div class="modal-content">
+<h2 id="modalTitle"></h2>
+<p id="modalText"></p>
+<button id="modalClose">Chiudi</button>
+</div>
+</div>
+
+
+<footer>
+<small>Mnemo — versione estesa • Progetto didattico</small>
+</footer>
+
+
+<script src="js/utils.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/game.js"></script>
 </body>
 </html>
