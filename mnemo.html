@@ -1,85 +1,37 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mnemo - Memory Evolution</title>
-<link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory Game</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header id="header">
-<h1 id="gameTitle">Mnemo</h1>
-<div id="controls">
-<label for="difficulty">Difficoltà</label>
-<select id="difficulty">
-<option value="easy">Facile (4x4)</option>
-<option value="medium" selected>Normale (4x5)</option>
-<option value="hard">Difficile (6x6)</option>
-</select>
 
+  <div id="gameTitle">Mnemo</div>
 
-<button id="startBtn" class="primary">Start</button>
-<button id="restartBtn">Ricomincia</button>
-<button id="hintBtn">Hint (x2)</button>
+  <div class="controls">
+    <label for="difficulty">Difficoltà:</label>
+    <select id="difficulty">
+      <option value="easy">Facile (4x4)</option>
+      <option value="medium" selected>Normale (4x4)</option>
+      <option value="hard">Difficile (4x4)</option>
+    </select>
 
+    <label>
+      <input type="checkbox" id="soundToggle" checked /> Suoni
+    </label>
+    
+    <div class="timer">Tempo: <span id="timer">00:00</span></div>
+  </div>
 
-<label class="switch">
-<input id="soundToggle" type="checkbox" checked />
-<span class="slider"></span>
-</label>
-<span class="small">Suoni</span>
-</div>
-</header>
+  <div id="message"></div>
+  <div class="lives" id="lives"></div>
+  <div class="scoreboard" id="scoreboard">Punteggio: 0</div>
+  <div class="game-board" id="gameBoard"></div>
+  <button id="restartBtn">Ricomincia</button>
 
-
-<main>
-<section id="hud">
-<div id="message"></div>
-<div id="scoreboard">Punteggio: 0</div>
-<div id="stats">
-<div>Tempo: <span id="timer">00:00</span></div>
-<div>Move: <span id="moves">0</span></div>
-<div id="lives" class="lives"></div>
-</div>
-</section>
-
-
-<section id="gameArea">
-<div class="game-board" id="gameBoard" aria-live="polite"></div>
-</section>
-
-
-<section id="sidebar">
-<h3>Power-ups</h3>
-<ul id="powerups">
-<li><button id="revealBtn">Reveal (cost 15)</button></li>
-<li><button id="freezeBtn">Freeze (cost 20)</button></li>
-</ul>
-
-
-<h3>Classifica locale</h3>
-<ol id="leaderboard"></ol>
-</section>
-</main>
-
-
-<!-- Modal risultato -->
-<div id="modal" class="modal hidden" role="dialog" aria-modal="true">
-<div class="modal-content">
-<h2 id="modalTitle"></h2>
-<p id="modalText"></p>
-<button id="modalClose">Chiudi</button>
-</div>
-</div>
-
-
-<footer>
-<small>Mnemo — versione estesa • Progetto didattico</small>
-</footer>
-
-
-<script src="js/utils.js"></script>
-<script src="js/ui.js"></script>
-<script src="js/game.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/features.js"></script>
 </body>
 </html>
