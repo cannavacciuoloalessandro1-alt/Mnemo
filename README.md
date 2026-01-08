@@ -1,81 +1,74 @@
 # Mnemo
 Il più classico dei giochi mnemonici, Mnemo stimola la memoria, invitandoti a ricordarti le lettere e abbianarle alle gemelle. Buon divertimento!
 
-Mnemo – Memory Evolution
 
-Versione: estesa • Progetto didattico
-Autore: Alessandro (o chi lo implementa)
-Tecnologie: HTML5, CSS3, JavaScript (vanilla)
+Mnemo – Memory Game
 
-Descrizione
+Mnemo è un gioco di memoria realizzato in HTML, CSS e JavaScript. L’obiettivo è trovare tutte le coppie di carte prima che scadano le vite o il tempo.
 
-Mnemo è un gioco di memoria (Memory) evoluto, con caratteristiche aggiuntive:
-    Diverse difficoltà (easy, medium, hard)
-    Punteggio, vite e timer
-    Power-up: Reveal e Freeze
-    Classifica locale salvata nel localStorage
-    Effetti sonori opzionali
-    Interfaccia responsive e stile moderno con transizioni fluide
+Funzionalità principali
 
-L’obiettivo del gioco è abbinare tutte le coppie di carte nel minor numero di mosse possibile prima che scadano le vite o il tempo.
+Griglia di carte con lettere, numeri e simboli.
 
-1. HTML (mnemo.html) - È la struttura del sito
+Difficoltà selezionabile: Facile, Normale, Difficile (modifica numero di vite e tempo).
 
-Definisce dove stanno gli elementi:
-    Header: titolo, selezione difficoltà, pulsanti, toggle suoni
-    Main: HUD (punteggio, mosse, vite, timer), area di gioco, sidebar con power-up e classifica
-    Modal: popup per vittoria o game over
-    Footer: informazioni
-Include i file CSS e JS che servono a dare stile e logica al gioco.
+Timer con conto alla rovescia.
 
-2. CSS (styles.css) - Gestisce l’aspetto visivo del gioco.
+Vite visualizzate con cuori ❤️: ogni errore fa perdere mezza vita.
 
-Definisce:
-    Colori, sfondi, gradient, font
-    Layout responsive con grid (per le carte e sidebar)
-    Stile delle carte:
-        .card → dimensioni, colore, effetto flip
-        .card.flipped → carta girata
-        .card.matched → carta abbinata (verde, non cliccabile)
-    Stile HUD, lives, modal e sidebar
-Permette animazioni fluide (transizioni, rotazioni 3D)
+Punteggio: +10 punti per ogni coppia trovata.
 
-3. JavaScript – Utilità (utils.js)
+Suoni quando si gira una carta e quando si fa un match (attivabili/disattivabili).
 
-Funzioni di supporto generiche:
-    shuffle → mescola le carte
-    sleep → pausa temporizzata per animazioni
-    formatTime → converte secondi in MM:SS
-    createPairs → genera coppie di simboli casuali
-    save e load → gestione dati con localStorage (classifica)
+Bottone “Ricomincia” per resettare il gioco.
 
-4. JavaScript – Interfaccia (ui.js)
+Come giocare
 
-Si occupa di manipolare il DOM:
-    Mostrare le carte
-    Aggiornare punteggio, mosse, vite e timer
-    Mostrare messaggi temporanei
-    Gestire popup e classifica
-    Fondamentalmente dice al browser come cambiare ciò che l’utente vede in base allo stato del gioco.
+Apri index.html in un browser.
 
-5. JavaScript – Logica di gioco (game.js)
+Scegli la difficoltà.
 
-È il cuore del gioco, contiene le regole e il funzionamento:
+Clicca sulle carte per girarle e trovare le coppie uguali.
 
-Stato del gioco: carte girate, punteggio, mosse, vite, timer
+Il gioco termina quando trovi tutte le coppie o finiscono vite/tempo.
 
-Funzioni principali:
+Come funziona il codice
+1. HTML (index.html)
 
-flip() → girare una carta
+Contiene la struttura: titolo, controlli (difficoltà, suoni, timer), griglia delle carte e bottone di restart.
 
-checkMatch() → verificare se due carte matchano
+2. CSS (interno o in styles.css)
 
-reset() → inizializzare il gioco
+Gestisce layout, colori, animazioni di flip delle carte e stile dei cuori per le vite.
 
-Power-up: hint, powerReveal, powerFreeze
+3. JavaScript
 
-Gestione vittoria e game over
+game.js (logica principale)
 
-Timer e suoni opzionali
+createCards(): seleziona simboli casuali e duplica le coppie.
 
-Event listener per pulsanti e interazione con carte
+shuffle(): mescola le carte per randomizzare la posizione.
+
+handleCardClick(): gestisce il click sulle carte, flip, match/mismatch, punteggio e vite.
+
+features.js (feature aggiuntive)
+
+setupGame(): inizializza e resetta il gioco in base alla difficoltà scelta.
+
+startTimer(): avvia il timer del gioco.
+
+updateLives(): mostra i cuori in base alle vite rimanenti.
+
+Gestione suoni tramite Web Audio API quando si gira una carta o si trova una coppia.
+
+4. Logica di gioco
+
+Ogni volta che clicchi una carta:
+
+Si gira (flip) e mostra il simbolo.
+
+Se sono girate due carte, controlla se coincidono:
+
+Match: aumenta punteggio, cambia colore carte e suona un suono.
+
+Mismatch: toglie mezza vita e le carte tornano coperte dopo 1 secondo.
