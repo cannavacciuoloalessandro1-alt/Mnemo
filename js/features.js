@@ -3,6 +3,9 @@ let lives = 5;
 let timer = 120;
 let timerInterval = null;
 
+const CONFIG = { time: 180, lives: 5, pairs: 8 };
+
+
 function updateLives() {
   const livesContainer = document.getElementById('lives');
   livesContainer.innerHTML = '';
@@ -35,8 +38,7 @@ function startTimer() {
 }
 
 function setupGame() {
-  const diff = document.getElementById('difficulty').value;
-  const config = DIFF[diff];
+  const config = CONFIG;
 
   createCards(config.pairs);
   const gameBoard = document.getElementById('gameBoard');
