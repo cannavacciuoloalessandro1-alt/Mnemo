@@ -3,12 +3,6 @@ let lives = 5;
 let timer = 120;
 let timerInterval = null;
 
-const DIFF = {
-  easy: { time: 180, lives: 6, pairs: 8 },
-  medium: { time: 150, lives: 5, pairs: 8 },
-  hard: { time: 120, lives: 5, pairs: 8 }
-};
-
 function updateLives() {
   const livesContainer = document.getElementById('lives');
   livesContainer.innerHTML = '';
