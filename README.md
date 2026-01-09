@@ -10,8 +10,6 @@ Funzionalità principali
 
 Griglia di carte con lettere, numeri e simboli.
 
-Difficoltà selezionabile: Facile, Normale, Difficile (modifica numero di vite e tempo).
-
 Timer con conto alla rovescia.
 
 Vite visualizzate con cuori ❤️: ogni errore fa perdere mezza vita.
@@ -25,8 +23,6 @@ Bottone “Ricomincia” per resettare il gioco.
 Come giocare
 
 Apri index.html in un browser.
-
-Scegli la difficoltà.
 
 Clicca sulle carte per girarle e trovare le coppie uguali.
 
